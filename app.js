@@ -34,6 +34,7 @@ function start() {
             // based on their answer, either call the Add, View, Update, or Exit functions!
             if (answer.addViewUpdate === 'Add') {
                 console.log("Add")
+                addDepartment();
             } else if (answer.addViewUpdate === 'View') {
                 departmentRoleEmployee();
                 // viewEmployees();
@@ -46,6 +47,37 @@ function start() {
             }
         });
 };
+
+function addDepartment() {
+    inquirer
+        .prompt({
+            name: 'addDept',
+            type: 'input',
+            message: "What department would you like to add?: ",
+        })
+
+        .then((answer) => {
+            // console.log(answer)
+            console.log(answer.addDept)
+            const query = connection.query(
+                'INSERT INTO department SET ?',
+                {
+                    name: answer.addDept,
+
+                },
+                (err, res) => {
+                    if (err) throw err;
+                    console.log(`${res.affectedRows} department inserted!\n`);
+
+                }
+            )
+        })
+};
+
+
+
+
+
 
 // View function to ask what the user would like displayed
 function departmentRoleEmployee() {
