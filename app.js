@@ -47,9 +47,10 @@ function start() {
         });
 };
 
-
+// View function to ask what the user would like displayed
 function departmentRoleEmployee() {
     inquirer
+        // Prompt to ask what the user would like displayed
         .prompt({
             name: 'deptRoleEmp',
             type: 'list',
@@ -59,49 +60,57 @@ function departmentRoleEmployee() {
 
         // Get the answer to the question
         .then((answer) => {
-            // based on their answer, either call the Add, View, Update, or Exit functions!
+            // Based on their answer, either call the ViewDepartments, ViewRoles, ViewEmployee, Functions, or go back to main menu!
             if (answer.deptRoleEmp === 'Departments') {
-                console.log("Departments")
+                // Call the View Departments Function
+                viewDepartments()
             } else if (answer.deptRoleEmp === 'Roles') {
-                console.log("Roles")
-                // viewEmployees();
+                // Call the View Roles Function
+                viewRoles()
             } else if (answer.deptRoleEmp === 'Employees') {
-                console.log("Employees")
+                // Call the View Employees Function
+                viewEmployees()
             } else {
+                // Call the Start Function to go back to the main menu
                 start()
             }
         });
 };
 
-
+// View Department Function to show the different departments
 function viewDepartments() {
-    // console.log("View Departments")
+    // Connect to the database and ask the question
     connection.query('SELECT * FROM department', (err, results) => {
         if (err) throw err;
+        // View the results
         console.table(results)
+        // Call the Start Function to go back to the main menu
+        start()
     })
 };
 
-function viewEmployees() {
-    console.log("View Employees")
-    connection.query('SELECT * FROM employee', (err, results) => {
-        if (err) throw err;
-        console.table(results)
-    })
-};
-
-function viewDepartments() {
-    console.log("View Departments")
-    connection.query('SELECT * FROM department', (err, results) => {
-        if (err) throw err;
-        console.table(results)
-    })
-};
-
+// View Department Function to show the different roles
 function viewRoles() {
-    console.log("View Roles")
+    // Connect to the database and ask the question
     connection.query('SELECT * FROM role', (err, results) => {
         if (err) throw err;
+        // View the results
         console.table(results)
+        // Call the Start Function to go back to the main menu
+        start()
     })
 };
+
+// View Department Function to show the different employees
+function viewEmployees() {
+    // Connect to the database and ask the question
+    connection.query('SELECT * FROM employee', (err, results) => {
+        if (err) throw err;
+        // View the results
+        console.table(results)
+        // Call the Start Function to go back to the main menu
+        start()
+
+    })
+};
+
