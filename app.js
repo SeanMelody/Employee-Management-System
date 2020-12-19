@@ -85,7 +85,9 @@ function viewDepartments() {
         // View the results
         console.table(results)
         // Call the Start Function to go back to the main menu
-        start()
+        // start()
+        viewDepartmentCosts()
+
     })
 };
 
@@ -114,3 +116,47 @@ function viewEmployees() {
     })
 };
 
+function viewDepartmentCosts() {
+    inquirer
+        // Prompt to ask what the user would like displayed
+        .prompt({
+            name: 'viewDeptCosts',
+            type: 'list',
+            message: 'Which department would you like to see the costs for',
+            choices: ['Engineering', 'Finance', 'Legal', 'Sales', 'Main Menu'],
+        })
+
+        // Get the answer to the question
+        .then((answer) => {
+            // Based on their answer, either call the Functions to get the information they want, or return to main menu!
+            if (answer.viewDeptCosts === 'Engineering') {
+                // Call the View Departments Function
+                engineeringCosts()
+            } else if (answer.viewDeptCosts === 'Finance') {
+                // Call the View Roles Function
+                financeCosts()
+            } else if (answer.viewDeptCosts === 'Legal') {
+                // Call the View Employees Function
+                legalCosts()
+            } else if (answer.viewDeptCosts === 'Sales') {
+                // Call the View Employees Function
+                salesCosts()
+            } else {
+                // Call the Start Function to go back to the main menu
+                start()
+            }
+        });
+};
+
+function engineeringCosts() {
+    console.log("Engineering Costs")
+}
+function financeCosts() {
+    console.log("Financing Costs")
+}
+function legalCosts() {
+    console.log("Legal Costs")
+}
+function salesCosts() {
+    console.log("Sales Costs")
+}
