@@ -229,7 +229,7 @@ function view() {
 // View Department Function to show the different departments
 function viewDepartments() {
     // Connect to the database and ask the question
-    connection.query('SELECT * FROM department', (err, results) => {
+    connection.query('SELECT name FROM department', (err, results) => {
         if (err) throw err;
         // View the results
         console.table(results)
@@ -243,7 +243,7 @@ function viewDepartments() {
 // View Department Function to show the different roles
 function viewRoles() {
     // Connect to the database and ask the question
-    connection.query('SELECT * FROM role', (err, results) => {
+    connection.query('SELECT title, salary FROM role', (err, results) => {
         if (err) throw err;
         // View the results
         console.table(results)
