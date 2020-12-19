@@ -39,7 +39,7 @@ function start() {
                 view();
                 // viewEmployees();
             } else if (answer.addViewUpdate === 'Update') {
-                console.log("Update")
+                update()
             } else {
                 console.log("Bye!")
                 connection.end();
@@ -53,7 +53,7 @@ function add() {
     inquirer
         // Prompt to ask what the user would like to add
         .prompt({
-            name: 'addDdeptRoleEmp',
+            name: 'addDeptRoleEmp',
             type: 'list',
             message: 'Would you like to Add Departments, Roles or Employees?',
             choices: ['Departments', 'Roles', 'Employees', 'Main Menu'],
@@ -62,21 +62,21 @@ function add() {
         // Get the answer to the question
         .then((answer) => {
             // Based on their answer, either call the AddDepartments, AddRoles, AddEmployee, Functions, or go back to main menu!
-            if (answer.addDdeptRoleEmp === 'Departments') {
+            if (answer.addDeptRoleEmp === 'Departments') {
                 // Call the Add Departments Function
                 // console.log("add Department")
                 addDepartment()
-            } else if (answer.addDdeptRoleEmp === 'Roles') {
+            } else if (answer.addDeptRoleEmp === 'Roles') {
                 // Call the Add Roles Function
                 addRole()
-            } else if (answer.addDdeptRoleEmp === 'Employees') {
+            } else if (answer.addDeptRoleEmp === 'Employees') {
                 // Call the Add Employees Function
                 addEmployee()
+
+            } else {
+                // Call the Start Function to go back to the main menu
+                start()
             }
-            // } else {
-            //     // Call the Start Function to go back to the main menu
-            //     start()
-            // }
         });
 };
 
@@ -328,3 +328,19 @@ function salesCosts() {
     console.log("Sales Costs")
 }
 
+function update() {
+    inquirer
+        // Prompt to ask what employee the user would like to update
+        .prompt({
+            name: 'updateRole',
+            type: 'list',
+            message: 'Which employee would you like to update?',
+            choices: ['Emoloyee1', 'Emoloyee2', 'Emoloyee3', 'Emoloyee4'],
+        })
+
+        .then((answer) => {
+            console.log(answer)
+            start()
+        })
+
+}
