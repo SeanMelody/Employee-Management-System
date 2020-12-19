@@ -31,7 +31,7 @@ function start() {
             if (answer.addViewUpdate === 'Add') {
                 console.log("Add")
             } else if (answer.addViewUpdate === 'View') {
-                console.log("View")
+                viewEmployees();
             } else if (answer.addViewUpdate === 'Update') {
                 console.log("Update")
             } else {
@@ -40,4 +40,12 @@ function start() {
                 process.exit(0);
             }
         });
+};
+
+function viewEmployees() {
+    console.log("View Employees")
+    connection.query('SELECT * FROM employee', (err, results) => {
+        if (err) throw err;
+        console.table(results)
+    })
 };
