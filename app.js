@@ -148,8 +148,26 @@ function viewDepartmentCosts() {
         });
 };
 
+// salary = 0;
 function engineeringCosts() {
-    console.log("Engineering Costs")
+    connection.query('SELECT salary FROM role', (err, results) => {
+        if (err) throw err;
+        // View the results
+        console.log(results[0])
+        // for (let i = 0; i < results.length; i++) {
+        //     salary = results[i]
+        //     salary++
+        //     console.log(salary)
+        // }
+        // console.log(salary)
+        // for (let i = 0; i < results.length; i++) {
+        //     const salaryTotal = array[i];
+
+        // }
+        // Call the Start Function to go back to the main menu
+        start()
+    })
+
 }
 function financeCosts() {
     console.log("Financing Costs")
@@ -160,3 +178,4 @@ function legalCosts() {
 function salesCosts() {
     console.log("Sales Costs")
 }
+
