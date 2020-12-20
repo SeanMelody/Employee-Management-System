@@ -90,7 +90,7 @@ function addDepartment() {
 
         .then((answer) => {
             // console.log(answer)
-            console.log(answer.addDept)
+            console.log(`${answer.addDept} Department Inserted~ \n`)
             const query = connection.query(
                 'INSERT INTO department SET ?',
                 {
@@ -102,7 +102,10 @@ function addDepartment() {
                     console.log(`${res.affectedRows} department inserted!\n`);
 
                 }
+                // console.log(`${res.affectedRows} department inserted!\n`);
+
             )
+            // console.log(`${res.affectedRows} department inserted!\n`);
             start()
         })
 };
@@ -126,23 +129,37 @@ function addRole() {
         },
         ])
 
+        // .then((answer) => {
+        //     console.log(answer)
+        //     start()
+        // })
+
         .then((answer) => {
+            // console.log(answer)
             console.log(answer)
-            // console.log(answer.addTitle)
-            // const query = connection.query(
-            //     'INSERT INTO department SET ?',
-            //     {
-            //         name: answer.addRole,
+            const query = connection.query(
+                'INSERT INTO role SET ?',
+                {
+                    title: answer.addTitle,
 
-            //     },
-            //     (err, res) => {
-            //         if (err) throw err;
-            //         console.log(`${res.affectedRows} department inserted!\n`);
+                },
+                {
+                    salary: answer.addSalary,
 
-            //     }
-            // )
-            start()
+                },
+                {
+                    department_id: answer.addDeptId,
+
+                },
+                (err, res) => {
+                    if (err) throw err;
+                    console.log(`${res.affectedRows} role inserted!\n`);
+
+                }
+            )
+            // start()
         })
+    start()
 
 };
 
@@ -233,9 +250,11 @@ function viewDepartments() {
         if (err) throw err;
         // View the results
         console.table(results)
+        console.log("----------------------------- \n")
         // Call the Start Function to go back to the main menu
-        // start()
-        viewDepartmentCosts()
+        start()
+        // Function to view costs by department
+        // viewDepartmentCosts()
 
     })
 };
@@ -247,6 +266,7 @@ function viewRoles() {
         if (err) throw err;
         // View the results
         console.table(results)
+        console.log("--------------------------------------------- \n")
         // Call the Start Function to go back to the main menu
         start()
     })
@@ -259,6 +279,7 @@ function viewEmployees() {
         if (err) throw err;
         // View the results
         console.table(results)
+        console.log("--------------------------------------------------------------------- \n")
         // Call the Start Function to go back to the main menu
         start()
 
