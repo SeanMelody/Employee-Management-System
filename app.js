@@ -139,18 +139,12 @@ function addRole() {
         .then((answer) => {
             // console.log(answer)
             console.log(answer)
-            const query = connection.query(
-                'INSERT INTO role SET ? AND ? AND ?',
+            connection.query(
+                'INSERT INTO role SET ?',
                 [
                     {
                         title: answer.addTitle,
-
-                    },
-                    {
                         salary: answer.addSalary,
-
-                    },
-                    {
                         department_id: answer.addDeptId,
 
                     },
@@ -190,29 +184,36 @@ function addEmployee() {
             message: "What Manager Id role would you like to add?: ",
         },
         ])
+
         .then((answer) => {
-            console.log(answer)
 
-            // .then((answer) => {
-            //         // Based on their answer, either call the ViewDepartments, ViewRoles, ViewEmployee, Functions, or go back to main menu!
-            //         if (answer.deptRoleEmp === 'Departments') {
-            //             // Call the View Departments Function
-            //             viewDepartments()
-            //         } else if (answer.deptRoleEmp === 'Roles') {
-            //             // Call the View Roles Function
-            //             viewRoles()
-            //         } else if (answer.deptRoleEmp === 'Employees') {
-            //             // Call the View Employees Function
-            //             viewEmployees()
-            //         } else {
-            //             // Call the Start Function to go back to the main menu
-            //             start()
-            //         }
-            console.log("Employee has been added")
-            start()
-        });
+            console.log(`${answer.addFirst} ${answer.addLast} employee Inserted \n`)
+            connection.query(
+                'INSERT INTO employee SET ?',
+                {
+                    first_name: answer.addFirst,
+                    last_name: answer.addLast,
+                    role_id: answer.addRoleId,
+                    manager_id: answer.addManagerId,
 
+                },
+
+                (err, res) => {
+                    if (err) throw err;
+                    console.log(`${res.affectedRows} department inserted!\n`)
+                    // Call the start function to go back to the main menu and restart the questions!
+                    start()
+                }
+
+
+            )
+
+        })
 };
+
+// });
+
+// };
 
 
 
