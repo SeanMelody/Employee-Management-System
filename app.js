@@ -1,5 +1,9 @@
+// Const to require mysql for the database
 const mysql = require("mysql");
+// Const to be able to use Inquirer to ask questions to the user
 const inquirer = require("inquirer");
+// Const Ctable as it is required for the homework to display the tables
+// const cTable = require('console.table');
 
 // Connect to the Database!
 const connection = mysql.createConnection({
