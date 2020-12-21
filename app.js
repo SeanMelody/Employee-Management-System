@@ -48,6 +48,7 @@ function start() {
         });
 };
 
+// Add function to see if the user would like to add A Dept, Role, or Employee!
 function add() {
 
     inquirer
@@ -64,9 +65,6 @@ function add() {
             // Based on their answer, either call the AddDepartments, AddRoles, AddEmployee, Functions, or go back to main menu!
             if (answer.addDeptRoleEmp === 'Departments') {
                 // Call the Add Departments Function
-                // console.log("add Department")
-
-
                 addDepartment()
             } else if (answer.addDeptRoleEmp === 'Roles') {
                 // Call the Add Roles Function
@@ -82,7 +80,9 @@ function add() {
         });
 };
 
+//Add Department Function to add a line to the department table
 function addDepartment() {
+    // Prompt the question
     inquirer
         .prompt({
             name: 'addDept',
@@ -90,9 +90,9 @@ function addDepartment() {
             message: "What department would you like to add?: ",
         })
 
+        //Get the answer!
         .then((answer) => {
-            // console.log(answer)
-            console.log(`${answer.addDept} Department Inserted \n`)
+            // Connect to the database and insert the info!
             const query = connection.query(
                 'INSERT INTO department SET ?',
                 {
@@ -101,18 +101,20 @@ function addDepartment() {
                 },
                 (err, res) => {
                     if (err) throw err;
-                    console.log(`${res.affectedRows} department inserted!\n`)
+                    // console.log(`${res.affectedRows} department inserted!\n`)
+
+                    //Let the User Know that the department that has been inserted!
+                    console.log(`${answer.addDept} Department Inserted \n`)
                     // Call the start function to go back to the main menu and restart the questions!
                     start()
                 }
-
-
             )
-
         })
 };
 
+//Add Role Function to add a line to the role table
 function addRole() {
+    // Prompt the questions
     inquirer
         .prompt([{
             name: 'addTitle',
@@ -130,15 +132,10 @@ function addRole() {
             message: "What Department Id role would you like to add?: ",
         },
         ])
-
-        // .then((answer) => {
-        //     console.log(answer)
-        //     start()
-        // })
-
+        // Get the answer to the questions
         .then((answer) => {
+            // Connect to the database and insert the info!
             // console.log(answer)
-            console.log(answer)
             connection.query(
                 'INSERT INTO role SET ?',
                 [
@@ -151,17 +148,18 @@ function addRole() {
                 ],
                 (err, res) => {
                     if (err) throw err;
-                    console.log(`${res.affectedRows} role inserted!\n`);
+                    //Let the User Know that the department that has been inserted!
+                    console.log(`${answer.addTitle} role inserted!\n`);
+                    // Call the start function to go back to the main menu and restart the questions!
                     start()
                 }
             )
-            // start()
         })
-    // start()
-
 };
 
+//Add Employee Function to add a line to the Employee table
 function addEmployee() {
+    // Prompt the questions
     inquirer
         .prompt([{
             name: 'addFirst',
@@ -184,10 +182,10 @@ function addEmployee() {
             message: "What Manager Id role would you like to add?: ",
         },
         ])
-
+        // Get the answer to the questions
         .then((answer) => {
-
-            console.log(`${answer.addFirst} ${answer.addLast} employee Inserted \n`)
+            // Connect to the database and insert the info!
+            // console.log(`${answer.addFirst} ${answer.addLast} employee Inserted \n`)
             connection.query(
                 'INSERT INTO employee SET ?',
                 {
@@ -200,22 +198,14 @@ function addEmployee() {
 
                 (err, res) => {
                     if (err) throw err;
-                    console.log(`${res.affectedRows} department inserted!\n`)
+                    //Let the User Know that the employee has been inserted!
+                    console.log(`${answer.addFirst} ${answer.addLast} employee Inserted \n`)
                     // Call the start function to go back to the main menu and restart the questions!
                     start()
                 }
-
-
             )
-
         })
 };
-
-// });
-
-// };
-
-
 
 
 // View function to ask what the user would like displayed
