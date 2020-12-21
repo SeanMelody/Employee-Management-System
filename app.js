@@ -41,7 +41,7 @@ function start() {
             } else if (answer.addViewUpdate === 'Update') {
                 update()
             } else {
-                console.log("Bye!")
+                console.log("Have a wonderful day!")
                 connection.end();
                 process.exit(0);
             }
@@ -65,6 +65,8 @@ function add() {
             if (answer.addDeptRoleEmp === 'Departments') {
                 // Call the Add Departments Function
                 // console.log("add Department")
+
+
                 addDepartment()
             } else if (answer.addDeptRoleEmp === 'Roles') {
                 // Call the Add Roles Function
@@ -90,7 +92,7 @@ function addDepartment() {
 
         .then((answer) => {
             // console.log(answer)
-            console.log(`${answer.addDept} Department Inserted~ \n`)
+            console.log(`${answer.addDept} Department Inserted \n`)
             const query = connection.query(
                 'INSERT INTO department SET ?',
                 {
@@ -99,14 +101,14 @@ function addDepartment() {
                 },
                 (err, res) => {
                     if (err) throw err;
-                    console.log(`${res.affectedRows} department inserted!\n`);
-
+                    console.log(`${res.affectedRows} department inserted!\n`)
+                    // Call the start function to go back to the main menu and restart the questions!
+                    start()
                 }
-                // console.log(`${res.affectedRows} department inserted!\n`);
+
 
             )
-            // console.log(`${res.affectedRows} department inserted!\n`);
-            start()
+
         })
 };
 
@@ -138,28 +140,30 @@ function addRole() {
             // console.log(answer)
             console.log(answer)
             const query = connection.query(
-                'INSERT INTO role SET ?',
-                {
-                    title: answer.addTitle,
+                'INSERT INTO role SET ? AND ? AND ?',
+                [
+                    {
+                        title: answer.addTitle,
 
-                },
-                {
-                    salary: answer.addSalary,
+                    },
+                    {
+                        salary: answer.addSalary,
 
-                },
-                {
-                    department_id: answer.addDeptId,
+                    },
+                    {
+                        department_id: answer.addDeptId,
 
-                },
+                    },
+                ],
                 (err, res) => {
                     if (err) throw err;
                     console.log(`${res.affectedRows} role inserted!\n`);
-
+                    start()
                 }
             )
             // start()
         })
-    start()
+    // start()
 
 };
 
