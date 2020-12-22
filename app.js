@@ -354,38 +354,44 @@ function update() {
     inquirer
         // Prompt to ask what employee the user would like to update
         .prompt([{
-            name: 'updateRole',
-            type: 'list',
-            message: 'Which employee would you like to update?',
-            choices: ["Matt", "Ashley", "Arya", "Ted"],
+            name: 'updateFirstName',
+            type: 'input',
+            message: 'What is the employee you would like to updates first name?',
+        },
+        {
+            name: 'updateLastName',
+            type: 'input',
+            message: 'What is the employee you would like to updates first last?',
         },
         {
             name: 'newRole',
-            type: 'list',
+            type: 'input',
             message: 'What Role would you like them to have?',
-            choices: ["Developer", "Accountant", "Database Admin", "Traveling Salesman"],
+            // choices: ["Developer", "Accountant", "Database Admin", "Traveling Salesman"],
         }
         ])
-
         // Get the answer to the questions
         .then((answer) => {
-            // console.log(answer)
+            console.log(answer)
             // Connect to the database and insert the info!
             connection.query(
                 'UPDATE employee SET ? WHERE ?',
                 [
                     {
-                        role_id: answer.updateRole,
+                        role_id: answer.newRole,
                     },
                     {
-                        first_name: answer.newRole,
+                        first_name: answer.updateFirstName
+                    },
+                    {
+                        first_name: answer.updateLastName,
                     },
 
                 ],
                 (err, res) => {
                     if (err) throw err;
                     //Let the User Know that the employee role has been updated!
-                    console.log(`${answer.updateRole} employee role updated \n`)
+                    console.log(`${answer.updateFirstName} ${answer.updateLastName}'s role updated \n`)
                     // Call the start function to go back to the main menu and restart the questions!
                     start()
                 }
