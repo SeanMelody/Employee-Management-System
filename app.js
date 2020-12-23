@@ -268,6 +268,7 @@ function viewRoles() {
         console.log("--------------------------------------------- \n")
         // Call the Start Function to go back to the main menu
         start()
+
     })
 };
 
