@@ -71,6 +71,8 @@ function viewEmployees() {
     })
 };
 
+//Inner Join
+
 function viewDepartmentCosts() {
     inquirer
         // Prompt to ask what the user would like displayed

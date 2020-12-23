@@ -251,9 +251,9 @@ function viewDepartments() {
         console.table(results)
         console.log("----------------------------- \n")
         // Call the Start Function to go back to the main menu
-        start()
+        // start()
         // Function to view costs by department
-        // viewDepartmentCosts()
+        viewDepartmentCosts()
 
     })
 };
@@ -274,7 +274,7 @@ function viewRoles() {
 // View Department Function to show the different employees
 function viewEmployees() {
     // Connect to the database and ask the question
-    connection.query('SELECT * FROM employee', (err, results) => {
+    connection.query('SELECT * FROM employee LEFT JOIN role ON employee.role_id=role.id', (err, results) => {
         if (err) throw err;
         // View the results
         console.table(results)
@@ -317,12 +317,20 @@ function viewDepartmentCosts() {
         });
 };
 
-// salary = 0;
+// let salary = 0;
 function engineeringCosts() {
     connection.query('SELECT salary FROM role', (err, results) => {
         if (err) throw err;
         // View the results
-        console.log(results[0])
+        // console.log(results[0].salary)
+        let pay = 0
+        results.map((item) => {
+
+            // console.log(item.salary)
+            pay += item.salary
+            // console.log(pay)
+        })
+        console.log(`Salary total for the Engineering Department is ${pay} \n`)
         // for (let i = 0; i < results.length; i++) {
         //     salary = results[i]
         //     salary++
@@ -398,3 +406,8 @@ function update() {
             )
         })
 };
+
+
+
+/// Second to last Changes
+//Last changes
