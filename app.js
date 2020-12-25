@@ -254,6 +254,7 @@ function viewDepartments() {
         // start()
         // Function to view costs by department
         viewDepartmentCosts()
+        // updateManager()
 
     })
 };
@@ -261,7 +262,7 @@ function viewDepartments() {
 // View Department Function to show the different roles
 function viewRoles() {
     // Connect to the database and ask the question
-    connection.query('SELECT title, salary FROM role', (err, results) => {
+    connection.query('SELECT * FROM role RIGHT JOIN department ON department.id=role.department_id', (err, results) => {
         if (err) throw err;
         // View the results
         console.table(results)
@@ -393,7 +394,7 @@ function update() {
                         first_name: answer.updateFirstName
                     },
                     {
-                        first_name: answer.updateLastName,
+                        last_name: answer.updateLastName,
                     },
 
                 ],
@@ -409,6 +410,52 @@ function update() {
 };
 
 
+function updateManager() {
+    inquirer
+        // Prompt to ask what employee the user would like to update
+        .prompt([{
+            name: 'updateFirstNameMan',
+            type: 'input',
+            message: 'What is the employee you would like to updates first name?',
+        },
+        {
+            name: 'updateLastNameMan',
+            type: 'input',
+            message: 'What is the employee you would like to updates first last?',
+        },
+        {
+            name: 'newManager',
+            type: 'input',
+            message: 'What Manager ID would you like them to have?',
+            // choices: ["Developer", "Accountant", "Database Admin", "Traveling Salesman"],
+        }
+        ])
 
-/// Second to last Changes
-//Last changes
+        // Get the answer to the questions
+        .then((answer) => {
+            // console.log(answer)
+            // Connect to the database and insert the info!
+            connection.query(
+                'UPDATE employee SET ? WHERE ?',
+                [
+                    {
+                        manager_id: answer.newManager,
+                    },
+                    {
+                        first_name: answer.updateFirstNameMan,
+                    },
+                    {
+                        last_name: answer.updateLastNameMan,
+                    },
+
+                ],
+                (err, res) => {
+                    if (err) throw err;
+                    //Let the User Know that the employee role has been updated!
+                    console.log(`${answer.newManager} employee role updated \n`)
+                    // Call the start function to go back to the main menu and restart the questions!
+                    start()
+                }
+            )
+        })
+};
