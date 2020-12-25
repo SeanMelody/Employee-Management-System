@@ -1,117 +1,123 @@
-
-// Delete Department Function to be able to delete Departments
-function deleteDepartments() {
-    // Prompt the questions
+// Update Function to find out what the user would like to Update
+function update() {
     inquirer
+        // Prompt to ask what the user would like displayed
         .prompt({
-            name: 'deleteDept',
-            type: 'input',
-            message: "What Department would you like to delete?: ",
+            name: 'empRoleOrManager',
+            type: 'list',
+            message: 'Would you like to update an Employees Role, or Employees Manager?',
+            choices: ['Employees Role', 'Employees Manager', 'Main Menu'],
         })
-        // Get the answer to the questions
-        .then((answer) => {
-            // Connect to the database and delete the info!
-            connection.query(
-                'DELETE FROM department WHERE ?',
-                [
-                    {
-                        name: answer.deleteDept
-                    },
-                ],
-                (err, res) => {
-                    if (err) throw err;
-                    //Let the User Know that the department that has been deleted!
-                    console.log(`${answer.deleteDept} Department Deleted!\n`);
-                    // Call the start function to go back to the main menu and restart the questions!
-                    start()
-                }
-            )
-        })
-};
 
-// Delete Roles Function to be able to delete Roles
-function deleteRoles() {
-    // Prompt the questions
-    inquirer
-        .prompt({
-            name: 'deleteRole',
-            type: 'input',
-            message: "What Role would you like to delete?: ",
-        })
-        // Get the answer to the questions
+        // Get the answer to the question
         .then((answer) => {
-            // Connect to the database and delete the info!
-            connection.query(
-                'DELETE FROM role WHERE ?',
-                [
-                    {
-                        title: answer.deleteRole
-                    },
-                ],
-                (err, res) => {
-                    if (err) throw err;
-                    //Let the User Know that the Role that has been deleted!
-                    console.log(`${answer.deleteRole} Role Deleted!\n`);
-                    // Call the start function to go back to the main menu and restart the questions!
-                    start()
-                }
-            )
-        })
+            // Based on their answer, either call the update Employee Role, update Employee Manager or go back to main menu!
+            if (answer.empRoleOrManager === 'Employees Role') {
+                // Call the View Departments Function
+                updateEmpRole()
+            } else if (answer.empRoleOrManager === 'Employees Manager') {
+                // Call the View Roles Function
+                updateEmpManager()
+            } else {
+                // Call the Start Function to go back to the main menu
+                start()
+            }
+        });
 };
-
-// Delete Employees Function to be able to delete Employees
-function deleteEmployees() {
-    // Prompt the questions
+//Update Function to update Employee's role
+function updateEmpRole() {
     inquirer
+        // Prompt to ask what employee the user would like to update
         .prompt([{
-            name: 'deleteFirstName',
+            name: 'updateFirstNameRole',
             type: 'input',
-            message: "What is the Employee's First Name you would like to delete?: ",
+            message: 'What is the employee you would like to updates first name?',
         },
         {
-            name: 'deleteLastName',
+            name: 'updateLastNameRole',
             type: 'input',
-            message: "What is the Employee's Last Name you would like to delete?: ",
-        }])
+            message: 'What is the employee you would like to updates first last?',
+        },
+        {
+            name: 'newRole',
+            type: 'input',
+            message: 'What Role would you like them to have?',
+            // choices: ["Developer", "Accountant", "Database Admin", "Traveling Salesman"],
+        }
+        ])
         // Get the answer to the questions
         .then((answer) => {
-
-            // *** TEST TO MAKE SURE THAT THE PERSON EXISTS IN THE DATABASE ***
-            // connection.query(
-            //     'SELECT first_name, last_name FROM employee',
-            //     [
-            //         {
-            //             first_name: answer.deleteFirstName,
-            //         },
-            //         {
-            //             last_name: answer.deleteLastName,
-            //         },
-            //     ],
-            //     (err, res) => {
-            //         if (err) throw err;
-
-            //         console.log(`${answer.deleteFirstName} ${answer.deleteLastName} Employee Deleted!\n`)
-            //         // Call the start function to go back to the main menu and restart the questions!
-            //         start()
-            //     }
-            // )
-            // *** END TEST ***
-
-            // Connect to the database and delete the info!
+            console.log(answer)
+            // Connect to the database and insert the info!
             connection.query(
-                'DELETE FROM employee WHERE ?',
+                'UPDATE employee SET ? WHERE ?',
                 [
                     {
-                        first_name: answer.deleteFirstName,
+                        role_id: answer.newRole,
                     },
                     {
-                        last_name: answer.deleteLastName,
+                        first_name: answer.updateFirstNameRole
                     },
+                    {
+                        last_name: answer.updateLastNameRole,
+                    },
+
                 ],
                 (err, res) => {
                     if (err) throw err;
-                    //Let the User Know that the employee has been deleted!
-                    console.log(`${answer.deleteFirstName} ${answer.deleteLastName} Employee Deleted!\n`);
+                    //Let the User Know that the employee role has been updated!
+                    console.log(`${answer.updateFirstNameRole} ${answer.updateLastNameRole}'s role updated \n`)
+                    // Call the start function to go back to the main menu and restart the questions!
+                    start()
+                }
+            )
+        })
+};
+
+
+function updateEmpManager() {
+    inquirer
+        // Prompt to ask what employee the user would like to update
+        .prompt([{
+            name: 'updateFirstNameMan',
+            type: 'input',
+            message: 'What is the employee you would like to updates first name?',
+        },
+        {
+            name: 'updateLastNameMan',
+            type: 'input',
+            message: 'What is the employee you would like to updates first last?',
+        },
+        {
+            name: 'newManager',
+            type: 'input',
+            message: 'What Manager ID would you like them to have?',
+            // choices: ["Developer", "Accountant", "Database Admin", "Traveling Salesman"],
+        }
+        ])
+
+        // Get the answer to the questions
+        .then((answer) => {
+            // console.log(answer)
+            // Connect to the database and insert the info!
+            connection.query(
+                'UPDATE employee SET ? WHERE ?',
+                [
+                    {
+                        manager_id: answer.newManager,
+                    },
+                    {
+                        first_name: answer.updateFirstNameMan,
+                    },
+                    {
+                        last_name: answer.updateLastNameMan,
+                    },
+
+                ],
+                (err, res) => {
+                    if (err) throw err;
+                    //Let the User Know that the employee role has been updated!
+                    console.log(`${answer.updateFirstNameMan} ${answer.updateLastNameMan} employee's Manager updated \n`)
                     // Call the start function to go back to the main menu and restart the questions!
                     start()
                 }

@@ -1,3 +1,32 @@
+// Delete Function to see what the user would like to delete
+function deleteQuestion() {
+    inquirer
+        // Prompt to ask what the user would like displayed
+        .prompt({
+            name: 'deleteDeptRoleEmp',
+            type: 'list',
+            message: 'Would you like to Delete a Department, Role, or Employee?',
+            choices: ['Departments', 'Roles', 'Employees', 'Main Menu'],
+        })
+
+        // Get the answer to the question
+        .then((answer) => {
+            // Based on their answer, either call the deleteDepartments, deleteRoles, deleteEmployee Functions, or go back to main menu!
+            if (answer.deleteDeptRoleEmp === 'Departments') {
+                // Call the delete Departments Function
+                deleteDepartments()
+            } else if (answer.deleteDeptRoleEmp === 'Roles') {
+                // Call the delete Roles Function
+                deleteRoles()
+            } else if (answer.deleteDeptRoleEmp === 'Employees') {
+                // Call the delete Employees Function
+                deleteEmployees()
+            } else {
+                // Call the Start Function to go back to the main menu
+                start()
+            }
+        });
+};
 
 // Delete Department Function to be able to delete Departments
 function deleteDepartments() {
