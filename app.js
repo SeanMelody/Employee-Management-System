@@ -30,8 +30,8 @@ function start() {
         .prompt({
             name: 'addViewUpdate',
             type: 'list',
-            message: 'Would you like to Add, View or Update Employee Roles?',
-            choices: ['Add', 'View', 'Update', 'Exit'],
+            message: 'Would you like to Add, View, Update or Delete?',
+            choices: ['Add', 'View', 'Update', 'Delete', 'Exit'],
         })
         // Get the answer to the question
         .then((answer) => {
@@ -43,7 +43,9 @@ function start() {
                 view();
                 // viewEmployees();
             } else if (answer.addViewUpdate === 'Update') {
-                update()
+                update();
+            } else if (answer.addViewUpdate === 'Delete') {
+                deleteQuestion();
             } else {
                 console.log("Have a wonderful day!")
                 connection.end();
@@ -219,8 +221,8 @@ function view() {
         .prompt({
             name: 'deptRoleEmp',
             type: 'list',
-            message: 'Would you like to View Departments, Roles or Employees?',
-            choices: ['Departments', 'Roles', 'Employees', 'Main Menu'],
+            message: 'Would you like to View Departments, Roles, Employees or Employees by Manager?',
+            choices: ['Departments', 'Roles', 'Employees', 'Employees by Manager', 'Main Menu'],
         })
 
         // Get the answer to the question
@@ -235,6 +237,9 @@ function view() {
             } else if (answer.deptRoleEmp === 'Employees') {
                 // Call the View Employees Function
                 viewEmployees()
+            } else if (answer.deptRoleEmp === 'Employees by Manager') {
+                // Call the View Employees by Manager Function
+                viewEmployeesManager()
             } else {
                 // Call the Start Function to go back to the main menu
                 start()
@@ -286,6 +291,20 @@ function viewEmployees() {
 
     })
 };
+
+function viewEmployeesManager() {
+    // Connect to the database and ask the question
+    connection.query('SELECT manager_id, first_name, last_name FROM employee', (err, results) => {
+        if (err) throw err;
+        // View the results
+        console.table(results)
+        console.log("----------------------------- \n")
+        // Call the Start Function to go back to the main menu
+        start()
+
+
+    })
+}
 
 function viewDepartmentCosts() {
     inquirer
@@ -459,3 +478,84 @@ function updateManager() {
             )
         })
 };
+
+function deleteQuestion() {
+    inquirer
+        // Prompt to ask what the user would like displayed
+        .prompt({
+            name: 'deleteDeptRoleEmp',
+            type: 'list',
+            message: 'Would you like to Delete a Department, Role, or Employee?',
+            choices: ['Departments', 'Roles', 'Employees', 'Main Menu'],
+        })
+
+        // Get the answer to the question
+        .then((answer) => {
+            // Based on their answer, either call the deleteDepartments, deleteRoles, deleteEmployee, Functions, or go back to main menu!
+            if (answer.deleteDeptRoleEmp === 'Departments') {
+                // Call the delete Departments Function
+                deleteDepartments()
+            } else if (answer.deleteDeptRoleEmp === 'Roles') {
+                // Call the delete Roles Function
+                deleteRoles()
+            } else if (answer.deleteDeptRoleEmp === 'Employees') {
+                // Call the delete Employees Function
+                deleteEmployees()
+            } else {
+                // Call the Start Function to go back to the main menu
+                start()
+            }
+        });
+};
+
+function deleteDepartments() {
+    // Prompt the questions
+    inquirer
+        .prompt({
+            name: 'deleteDept',
+            type: 'input',
+            message: "What Department would you like to delete?: ",
+        })
+        // Get the answer to the questions
+        .then((answer) => {
+            // Connect to the database and insert the info!
+            // console.log(answer)
+            connection.query(
+                'DELETE FROM department WHERE ?',
+                [
+                    {
+                        name: answer.deleteDept
+                    },
+                ],
+                (err, res) => {
+                    if (err) throw err;
+                    //Let the User Know that the department that has been inserted!
+                    console.log(`${answer.deleteDept} Department Deleted!\n`);
+                    // Call the start function to go back to the main menu and restart the questions!
+                    start()
+                }
+            )
+        })
+};
+
+//     console.log('Deleting all strawberry icecream...\n');
+//     connection.query(
+//       'DELETE FROM products WHERE ?',
+//       {
+//         flavor: 'strawberry',
+//       },
+//       (err, res) => {
+//         if (err) throw err;
+//         console.log(`${res.affectedRows} products deleted!\n`);
+//         // Call readProducts AFTER the DELETE completes
+//         readProducts();
+//       }
+//     );
+//   };
+// }
+function deleteRoles() {
+    console.log("delete Role")
+}
+function deleteEmployees() {
+    console.log("delete Employee")
+}
