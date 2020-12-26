@@ -340,10 +340,46 @@ function viewDepartmentCosts() {
 
 // let salary = 0;
 function engineeringCosts() {
+    // connection.query('SELECT salary FROM role', 
+
+    connection.query('SELECT salary FROM role WHERE ?',
+        {
+            title: 'Engineering'
+
+        },
+        (err, results) => {
+            if (err) throw err;
+            // View the results
+            // console.log(results[0].salary)
+            let pay = 0
+            results.map((item) => {
+
+                // console.log(item.salary)
+                pay += item.salary
+                // console.log(pay)
+            })
+            console.log(`Salary total for the Engineering Department is ${pay} \n`)
+            // for (let i = 0; i < results.length; i++) {
+            //     salary = results[i]
+            //     salary++
+            //     console.log(salary)
+            // }
+            // console.log(salary)
+            // for (let i = 0; i < results.length; i++) {
+            //     const salaryTotal = array[i];
+
+            // }
+            // Call the Start Function to go back to the main menu
+            start()
+        })
+
+}
+function financeCosts() {
+    console.log("Financing Costs")
     connection.query('SELECT salary FROM role', (err, results) => {
         if (err) throw err;
         // View the results
-        // console.log(results[0].salary)
+        console.log(results[0].salary)
         let pay = 0
         results.map((item) => {
 
@@ -352,33 +388,61 @@ function engineeringCosts() {
             // console.log(pay)
         })
         console.log(`Salary total for the Engineering Department is ${pay} \n`)
-        // for (let i = 0; i < results.length; i++) {
-        //     salary = results[i]
-        //     salary++
-        //     console.log(salary)
-        // }
-        // console.log(salary)
-        // for (let i = 0; i < results.length; i++) {
-        //     const salaryTotal = array[i];
 
-        // }
         // Call the Start Function to go back to the main menu
         start()
     })
 
 }
-function financeCosts() {
-    console.log("Financing Costs")
-}
 function legalCosts() {
     console.log("Legal Costs")
+    connection.query('SELECT salary FROM role WHERE ?',
+        {
+            title: "Legal"
+
+        },
+        (err, results) => {
+            if (err) throw err;
+            // View the results
+            console.log(results[0].salary)
+            let pay = 0
+            results.map((item) => {
+
+                // console.log(item.salary)
+                pay += item.salary
+                // console.log(pay)
+            })
+            console.log(`Salary total for the Engineering Department is ${pay} \n`)
+
+            // Call the Start Function to go back to the main menu
+            start()
+        })
+
 }
+
 function salesCosts() {
     console.log("Sales Costs")
+    connection.query('SELECT salary FROM role', (err, results) => {
+        if (err) throw err;
+        // View the results
+        console.log(results[0].salary)
+        let pay = 0
+        results.map((item) => {
+
+            // console.log(item.salary)
+            pay += item.salary
+            // console.log(pay)
+        })
+        console.log(`Salary total for the Engineering Department is ${pay} \n`)
+
+        // Call the Start Function to go back to the main menu
+        start()
+    })
 }
 
 // Update Function to find out what the user would like to Update
 function update() {
+
     inquirer
         // Prompt to ask what the user would like displayed
         .prompt({
