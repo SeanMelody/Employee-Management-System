@@ -221,8 +221,8 @@ function view() {
         .prompt({
             name: 'deptRoleEmp',
             type: 'list',
-            message: 'Would you like to View Departments, Roles, Employees or Employees by Manager?',
-            choices: ['Departments', 'Roles', 'Employees', 'Employees by Manager', 'Main Menu'],
+            message: 'What would you like to view?',
+            choices: ['Departments', 'Roles', 'Employees', 'Employees by Manager', 'Department Costs', 'Main Menu'],
         })
 
         // Get the answer to the question
@@ -240,6 +240,9 @@ function view() {
             } else if (answer.deptRoleEmp === 'Employees by Manager') {
                 // Call the View Employees by Manager Function
                 viewEmployeesManager()
+            } else if (answer.deptRoleEmp === 'Department Costs') {
+                // Call the View Department Costs Function
+                viewDepartmentCosts()
             } else {
                 // Call the Start Function to go back to the main menu
                 start()
@@ -254,12 +257,9 @@ function viewDepartments() {
         if (err) throw err;
         // View the results
         console.table(results)
-        console.log("----------------------------- \n")
+        console.log("\n")
         // Call the Start Function to go back to the main menu
-        // start()
-        // Function to view costs by department
-        viewDepartmentCosts()
-        // updateManager()
+        start()
 
     })
 };
@@ -271,7 +271,7 @@ function viewRoles() {
         if (err) throw err;
         // View the results
         console.table(results)
-        console.log("--------------------------------------------- \n")
+        console.log("\n")
         // Call the Start Function to go back to the main menu
         start()
 
@@ -281,11 +281,11 @@ function viewRoles() {
 // View Department Function to show the different employees
 function viewEmployees() {
     // Connect to the database and ask the question
-    connection.query('SELECT * FROM employee LEFT JOIN role ON employee.role_id=role.id', (err, results) => {
+    connection.query('SELECT * FROM employee LEFT JOIN role ON employee.role_id=role.id LEFT JOIN department ON department.id=role.department_id', (err, results) => {
         if (err) throw err;
         // View the results
         console.table(results)
-        console.log("--------------------------------------------------------------------- \n")
+        console.log("\n")
         // Call the Start Function to go back to the main menu
         start()
 
@@ -298,7 +298,7 @@ function viewEmployeesManager() {
         if (err) throw err;
         // View the results
         console.table(results)
-        console.log("----------------------------- \n")
+        console.log("\n")
         // Call the Start Function to go back to the main menu
         start()
 

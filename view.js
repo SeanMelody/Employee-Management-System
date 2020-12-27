@@ -1,4 +1,3 @@
-
 // View function to ask what the user would like displayed
 function view() {
     inquirer
@@ -6,8 +5,8 @@ function view() {
         .prompt({
             name: 'deptRoleEmp',
             type: 'list',
-            message: 'Would you like to View Departments, Roles or Employees?',
-            choices: ['Departments', 'Roles', 'Employees', 'Main Menu'],
+            message: 'What would you like to view?',
+            choices: ['Departments', 'Roles', 'Employees', 'Employees by Manager', 'Department Costs', 'Main Menu'],
         })
 
         // Get the answer to the question
@@ -22,6 +21,12 @@ function view() {
             } else if (answer.deptRoleEmp === 'Employees') {
                 // Call the View Employees Function
                 viewEmployees()
+            } else if (answer.deptRoleEmp === 'Employees by Manager') {
+                // Call the View Employees by Manager Function
+                viewEmployeesManager()
+            } else if (answer.deptRoleEmp === 'Department Costs') {
+                // Call the View Department Costs Function
+                viewDepartmentCosts()
             } else {
                 // Call the Start Function to go back to the main menu
                 start()
@@ -36,11 +41,9 @@ function viewDepartments() {
         if (err) throw err;
         // View the results
         console.table(results)
-        console.log("----------------------------- \n")
+        console.log("\n")
         // Call the Start Function to go back to the main menu
-        // start()
-        // Function to view costs by department
-        viewDepartmentCosts()
+        start()
 
     })
 };
@@ -48,11 +51,11 @@ function viewDepartments() {
 // View Department Function to show the different roles
 function viewRoles() {
     // Connect to the database and ask the question
-    connection.query('SELECT title, salary FROM role', (err, results) => {
+    connection.query('SELECT * FROM role RIGHT JOIN department ON department.id=role.department_id', (err, results) => {
         if (err) throw err;
         // View the results
         console.table(results)
-        console.log("--------------------------------------------- \n")
+        console.log("\n")
         // Call the Start Function to go back to the main menu
         start()
 
@@ -62,16 +65,30 @@ function viewRoles() {
 // View Department Function to show the different employees
 function viewEmployees() {
     // Connect to the database and ask the question
-    connection.query('SELECT * FROM employee LEFT JOIN role ON employee.role_id=role.id', (err, results) => {
+    connection.query('SELECT * FROM employee LEFT JOIN role ON employee.role_id=role.id LEFT JOIN department ON department.id=role.department_id', (err, results) => {
         if (err) throw err;
         // View the results
         console.table(results)
-        console.log("--------------------------------------------------------------------- \n")
+        console.log("\n")
         // Call the Start Function to go back to the main menu
         start()
 
     })
 };
+
+function viewEmployeesManager() {
+    // Connect to the database and ask the question
+    connection.query('SELECT manager_id, first_name, last_name FROM employee', (err, results) => {
+        if (err) throw err;
+        // View the results
+        console.table(results)
+        console.log("\n")
+        // Call the Start Function to go back to the main menu
+        start()
+
+
+    })
+}
 
 function viewDepartmentCosts() {
     inquirer
@@ -107,10 +124,46 @@ function viewDepartmentCosts() {
 
 // let salary = 0;
 function engineeringCosts() {
+    // connection.query('SELECT salary FROM role', 
+
+    connection.query('SELECT salary FROM role WHERE ?',
+        {
+            title: 'Engineering'
+
+        },
+        (err, results) => {
+            if (err) throw err;
+            // View the results
+            // console.log(results[0].salary)
+            let pay = 0
+            results.map((item) => {
+
+                // console.log(item.salary)
+                pay += item.salary
+                // console.log(pay)
+            })
+            console.log(`Salary total for the Engineering Department is ${pay} \n`)
+            // for (let i = 0; i < results.length; i++) {
+            //     salary = results[i]
+            //     salary++
+            //     console.log(salary)
+            // }
+            // console.log(salary)
+            // for (let i = 0; i < results.length; i++) {
+            //     const salaryTotal = array[i];
+
+            // }
+            // Call the Start Function to go back to the main menu
+            start()
+        })
+
+}
+function financeCosts() {
+    console.log("Financing Costs")
     connection.query('SELECT salary FROM role', (err, results) => {
         if (err) throw err;
         // View the results
-        // console.log(results[0].salary)
+        console.log(results[0].salary)
         let pay = 0
         results.map((item) => {
 
@@ -119,27 +172,54 @@ function engineeringCosts() {
             // console.log(pay)
         })
         console.log(`Salary total for the Engineering Department is ${pay} \n`)
-        // for (let i = 0; i < results.length; i++) {
-        //     salary = results[i]
-        //     salary++
-        //     console.log(salary)
-        // }
-        // console.log(salary)
-        // for (let i = 0; i < results.length; i++) {
-        //     const salaryTotal = array[i];
 
-        // }
         // Call the Start Function to go back to the main menu
         start()
     })
 
 }
-function financeCosts() {
-    console.log("Financing Costs")
-}
 function legalCosts() {
     console.log("Legal Costs")
+    connection.query('SELECT salary FROM role WHERE ?',
+        {
+            title: "Legal"
+
+        },
+        (err, results) => {
+            if (err) throw err;
+            // View the results
+            console.log(results[0].salary)
+            let pay = 0
+            results.map((item) => {
+
+                // console.log(item.salary)
+                pay += item.salary
+                // console.log(pay)
+            })
+            console.log(`Salary total for the Engineering Department is ${pay} \n`)
+
+            // Call the Start Function to go back to the main menu
+            start()
+        })
+
 }
+
 function salesCosts() {
     console.log("Sales Costs")
+    connection.query('SELECT salary FROM role', (err, results) => {
+        if (err) throw err;
+        // View the results
+        console.log(results[0].salary)
+        let pay = 0
+        results.map((item) => {
+
+            // console.log(item.salary)
+            pay += item.salary
+            // console.log(pay)
+        })
+        console.log(`Salary total for the Engineering Department is ${pay} \n`)
+
+        // Call the Start Function to go back to the main menu
+        start()
+    })
 }
