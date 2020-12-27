@@ -344,16 +344,18 @@ function viewDepartmentCosts() {
 // let salary = 0;
 function engineeringCosts() {
     // connection.query('SELECT salary FROM role', 
-
-    connection.query('SELECT salary FROM role WHERE ?',
+    //SELECT * FROM role LEFT JOIN department ON department.id=role.department_id
+    connection.query('SELECT * FROM employee LEFT JOIN role ON employee.role_id=role.id LEFT JOIN department ON department.id=role.department_id WHERE ?',
         {
-            title: 'Engineering'
+            name: 'Engineering'
 
         },
         (err, results) => {
             if (err) throw err;
+            console.table(results)
             // View the results
             // console.log(results[0].salary)
+
             let pay = 0
             results.map((item) => {
 
@@ -493,7 +495,7 @@ function updateEmpRole() {
         ])
         // Get the answer to the questions
         .then((answer) => {
-            console.log(answer)
+            // console.log(answer)
             // Connect to the database and insert the info!
             connection.query(
                 'UPDATE employee SET ? WHERE ?',
