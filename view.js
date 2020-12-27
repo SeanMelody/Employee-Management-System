@@ -78,7 +78,9 @@ function viewEmployees() {
 
 function viewEmployeesManager() {
     // Connect to the database and ask the question
-    connection.query('SELECT manager_id, first_name, last_name FROM employee', (err, results) => {
+
+    //Thank you to Mike S from Stack overflow who answered a similar question in 2021
+    connection.query('SELECT e.id, e.first_name AS Employee, m.id, m.first_name AS Manager FROM employee e INNER JOIN employee m ON m.id=e.manager_id ORDER BY e.id', (err, results) => {
         if (err) throw err;
         // View the results
         console.table(results)
