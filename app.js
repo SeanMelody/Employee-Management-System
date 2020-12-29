@@ -5,6 +5,16 @@ const inquirer = require("inquirer");
 // Const Ctable as it is required for the homework to display the tables
 // const cTable = require('console.table');
 
+// Const Colors to color the text in the console. Yeay!
+const colors = require('colors');
+// Const clear to clear the console. Yeay!
+const clear = require('clear');
+// Const Figlet to print my super cool title in the console. Yeay!
+const figlet = require('figlet');
+
+
+
+
 // Connect to the Database!
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -22,15 +32,35 @@ connection.connect((err) => {
     start();
 });
 
+//Welcome Sign to Display the title of the Application using Figlet
+function welcome() {
+    // Clear used to clear the console before the start of the program.
+    clear()
+    // Figlet used here! Font Braced
+    console.log("===============================".brightBlue)
+    console.log(figlet.textSync('Seans \nEmployee \nManagement \nSystem', {
+        font: 'Calvin S',
+        horizontalLayout: 'fitted',
+        verticalLayout: 'default',
+        width: 80,
+        whitespaceBreak: true
+
+    }));
+    console.log("===============================".brightBlue)
+}
+// Call the Welcome Function to display the title of the application
+welcome()
+
+
 // Start the program!
 function start() {
     // Prompt the first question
     inquirer
-        // Options are Add, View, Update or Exit the Program
+        // Options are Add, View, Update, Delete or Exit the Program
         .prompt({
             name: 'addViewUpdate',
             type: 'list',
-            message: 'Would you like to Add, View, Update or Delete?',
+            message: 'Would you like to Add, View, Update or Delete?'.brightRed,
             choices: ['Add', 'View', 'Update', 'Delete', 'Exit'],
         })
         // Get the answer to the question
@@ -297,7 +327,7 @@ function viewEmployeesManager() {
     // Connect to the database and ask the question
 
     //Thank you to Mike S from Stack overflow who answered a similar question in 2021
-    connection.query('SELECT e.id, e.first_name AS Employee, m.id, m.first_name AS Manager FROM employee e INNER JOIN employee m ON m.id=e.manager_id ORDER BY e.id', (err, results) => {
+    connection.query('SELECT e.first_name AS Employee, m.first_name AS Manager FROM employee e INNER JOIN employee m ON m.id=e.manager_id ORDER BY e.id', (err, results) => {
         if (err) throw err;
         // View the results
         console.table(results)
@@ -308,38 +338,78 @@ function viewEmployeesManager() {
 
     })
 }
+//SAVE THIS!!!!
+// function viewDepartmentCosts() {
+//     inquirer
+//         // Prompt to ask what the user would like displayed
+//         .prompt({
+//             name: 'viewDeptCosts',
+//             type: 'list',
+//             message: 'Which department would you like to see the costs for',
+//             choices: ['Engineering', 'Finance', 'Legal', 'Sales', 'Main Menu'],
+//         })
 
+//         // Get the answer to the question
+//         .then((answer) => {
+//             // Based on their answer, either call the Functions to get the information they want, or return to main menu!
+//             if (answer.viewDeptCosts === 'Engineering') {
+//                 // Call the View Departments Function
+//                 engineeringCosts()
+//             } else if (answer.viewDeptCosts === 'Finance') {
+//                 // Call the View Roles Function
+//                 financeCosts()
+//             } else if (answer.viewDeptCosts === 'Legal') {
+//                 // Call the View Employees Function
+//                 legalCosts()
+//             } else if (answer.viewDeptCosts === 'Sales') {
+//                 // Call the View Employees Function
+//                 salesCosts()
+//             } else {
+//                 // Call the Start Function to go back to the main menu
+//                 start()
+//             }
+//         });
+// };
+
+//TEST
 function viewDepartmentCosts() {
     inquirer
         // Prompt to ask what the user would like displayed
         .prompt({
             name: 'viewDeptCosts',
-            type: 'list',
-            message: 'Which department would you like to see the costs for',
-            choices: ['Engineering', 'Finance', 'Legal', 'Sales', 'Main Menu'],
+            type: 'input',
+            message: 'Which department would you like to see the costs for? ',
         })
 
         // Get the answer to the question
         .then((answer) => {
-            // Based on their answer, either call the Functions to get the information they want, or return to main menu!
-            if (answer.viewDeptCosts === 'Engineering') {
-                // Call the View Departments Function
-                engineeringCosts()
-            } else if (answer.viewDeptCosts === 'Finance') {
-                // Call the View Roles Function
-                financeCosts()
-            } else if (answer.viewDeptCosts === 'Legal') {
-                // Call the View Employees Function
-                legalCosts()
-            } else if (answer.viewDeptCosts === 'Sales') {
-                // Call the View Employees Function
-                salesCosts()
-            } else {
-                // Call the Start Function to go back to the main menu
-                start()
-            }
+            // console.log(answer)
+            connection.query('SELECT * FROM employee LEFT JOIN role ON employee.role_id=role.id LEFT JOIN department ON department.id=role.department_id WHERE ?',
+                {
+                    name: answer.viewDeptCosts
+
+                },
+                (err, results) => {
+                    if (err) throw err;
+                    console.table(results)
+
+                    let pay = 0
+                    results.map((item) => {
+
+                        pay += item.salary
+                    })
+                    console.log(`Salary total for the ${answer.viewDeptCosts} Department is ${pay} \n`)
+
+                    // Call the Start Function to go back to the main menu
+                    start()
+                })
+
         });
+
+
+
 };
+//END TEST
 
 // let salary = 0;
 function engineeringCosts() {
@@ -381,35 +451,17 @@ function engineeringCosts() {
 }
 function financeCosts() {
     console.log("Financing Costs")
-    connection.query('SELECT salary FROM role', (err, results) => {
-        if (err) throw err;
-        // View the results
-        console.log(results[0].salary)
-        let pay = 0
-        results.map((item) => {
-
-            // console.log(item.salary)
-            pay += item.salary
-            // console.log(pay)
-        })
-        console.log(`Salary total for the Engineering Department is ${pay} \n`)
-
-        // Call the Start Function to go back to the main menu
-        start()
-    })
-
-}
-function legalCosts() {
-    console.log("Legal Costs")
-    connection.query('SELECT salary FROM role WHERE ?',
+    connection.query('SELECT * FROM employee LEFT JOIN role ON employee.role_id=role.id LEFT JOIN department ON department.id=role.department_id WHERE ?',
         {
-            title: "Legal"
+            name: 'Finance'
 
         },
         (err, results) => {
             if (err) throw err;
+            console.table(results)
             // View the results
-            console.log(results[0].salary)
+            // console.log(results[0].salary)
+
             let pay = 0
             results.map((item) => {
 
@@ -418,7 +470,52 @@ function legalCosts() {
                 // console.log(pay)
             })
             console.log(`Salary total for the Engineering Department is ${pay} \n`)
+            // for (let i = 0; i < results.length; i++) {
+            //     salary = results[i]
+            //     salary++
+            //     console.log(salary)
+            // }
+            // console.log(salary)
+            // for (let i = 0; i < results.length; i++) {
+            //     const salaryTotal = array[i];
 
+            // }
+            // Call the Start Function to go back to the main menu
+            start()
+        })
+
+}
+function legalCosts() {
+    // console.log("Legal Costs")
+    connection.query('SELECT * FROM employee LEFT JOIN role ON employee.role_id=role.id LEFT JOIN department ON department.id=role.department_id WHERE ?',
+        {
+            name: 'Legal'
+
+        },
+        (err, results) => {
+            if (err) throw err;
+            console.table(results)
+            // View the results
+            // console.log(results[0].salary)
+
+            let pay = 0
+            results.map((item) => {
+
+                // console.log(item.salary)
+                pay += item.salary
+                // console.log(pay)
+            })
+            console.log(`Salary total for the Engineering Department is ${pay} \n`)
+            // for (let i = 0; i < results.length; i++) {
+            //     salary = results[i]
+            //     salary++
+            //     console.log(salary)
+            // }
+            // console.log(salary)
+            // for (let i = 0; i < results.length; i++) {
+            //     const salaryTotal = array[i];
+
+            // }
             // Call the Start Function to go back to the main menu
             start()
         })
