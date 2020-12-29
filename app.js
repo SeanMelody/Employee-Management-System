@@ -3,8 +3,7 @@ const mysql = require("mysql");
 // Const to be able to use Inquirer to ask questions to the user
 const inquirer = require("inquirer");
 // Const Ctable as it is required for the homework to display the tables
-// const cTable = require('console.table');
-
+const cTable = require('console.table');
 // Const Colors to color the text in the console. Yeay!
 const colors = require('colors');
 // Const clear to clear the console. Yeay!
@@ -27,6 +26,7 @@ const connection = mysql.createConnection({
     database: 'employees_db',
 });
 
+//Connect and check for dem errors!
 connection.connect((err) => {
     if (err) throw err;
     start();
@@ -36,8 +36,8 @@ connection.connect((err) => {
 function welcome() {
     // Clear used to clear the console before the start of the program.
     clear()
-    // Figlet used here! Font Braced
     console.log("===============================".brightBlue)
+    // Figlet used here! Font Calvin S
     console.log(figlet.textSync('Seans \nEmployee \nManagement \nSystem', {
         font: 'Calvin S',
         horizontalLayout: 'fitted',
@@ -77,7 +77,7 @@ function start() {
             } else if (answer.addViewUpdate === 'Delete') {
                 deleteQuestion();
             } else {
-                console.log("Have a wonderful day!")
+                console.log("Have a wonderful day!".rainbow)
                 connection.end();
                 process.exit(0);
             }
@@ -92,7 +92,7 @@ function add() {
         .prompt({
             name: 'addDeptRoleEmp',
             type: 'list',
-            message: 'Would you like to Add Departments, Roles or Employees?',
+            message: 'Would you like to Add Departments, Roles or Employees?'.brightGreen,
             choices: ['Departments', 'Roles', 'Employees', 'Main Menu'],
         })
 
@@ -140,7 +140,7 @@ function addDepartment() {
                     // console.log(`${res.affectedRows} department inserted!\n`)
 
                     //Let the User Know that the department that has been inserted!
-                    console.log(`${answer.addDept} Department Inserted \n`)
+                    console.log(`${answer.addDept} Department Inserted \n`.yellow)
                     // Call the start function to go back to the main menu and restart the questions!
                     start()
                 }
@@ -185,7 +185,7 @@ function addRole() {
                 (err, res) => {
                     if (err) throw err;
                     //Let the User Know that the department that has been inserted!
-                    console.log(`${answer.addTitle} role inserted!\n`);
+                    console.log(`${answer.addTitle} role inserted!\n`.yellow);
                     // Call the start function to go back to the main menu and restart the questions!
                     start()
                 }
@@ -235,7 +235,7 @@ function addEmployee() {
                 (err, res) => {
                     if (err) throw err;
                     //Let the User Know that the employee has been inserted!
-                    console.log(`${answer.addFirst} ${answer.addLast} employee Inserted \n`)
+                    console.log(`${answer.addFirst} ${answer.addLast} employee Inserted \n`.yellow)
                     // Call the start function to go back to the main menu and restart the questions!
                     start()
                 }
@@ -251,7 +251,7 @@ function view() {
         .prompt({
             name: 'deptRoleEmp',
             type: 'list',
-            message: 'What would you like to view?',
+            message: 'What would you like to view?'.brightGreen,
             choices: ['Departments', 'Roles', 'Employees', 'Employees by Manager', 'Department Costs', 'Main Menu'],
         })
 
@@ -550,7 +550,7 @@ function update() {
         .prompt({
             name: 'empRoleOrManager',
             type: 'list',
-            message: 'Would you like to update an Employees Role, or Employees Manager?',
+            message: 'Would you like to update an Employees Role, or Employees Manager?'.brightGreen,
             choices: ['Employees Role', 'Employees Manager', 'Main Menu'],
         })
 
@@ -677,7 +677,7 @@ function deleteQuestion() {
         .prompt({
             name: 'deleteDeptRoleEmp',
             type: 'list',
-            message: 'Would you like to Delete a Department, Role, or Employee?',
+            message: 'Would you like to Delete a Department, Role, or Employee?'.brightGreen,
             choices: ['Departments', 'Roles', 'Employees', 'Main Menu'],
         })
 
