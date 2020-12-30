@@ -278,6 +278,7 @@ function viewDepartments() {
     connection.query('SELECT * FROM department', (err, results) => {
         if (err) throw err;
         // View the results
+        console.log("\n")
         console.table(results)
         console.log("\n")
         // Call the Start Function to go back to the main menu
@@ -293,6 +294,7 @@ function viewRoles() {
     connection.query('SELECT * FROM role INNER JOIN department ON department.id=role.id', (err, results) => {
         if (err) throw err;
         // View the results
+        console.log("\n")
         console.table(results)
         console.log("\n")
         // Call the Start Function to go back to the main menu
@@ -317,6 +319,7 @@ function viewEmployees() {
     connection.query('SELECT * FROM employee INNER JOIN role ON employee.role_id=role.id INNER JOIN department ON department.id=role.department_id', (err, results) => {
         if (err) throw err;
         // View the results
+        console.log("\n")
         console.table(results)
         console.log("\n")
         // Call the Start Function to go back to the main menu
@@ -333,6 +336,7 @@ function viewEmployeesManager() {
     connection.query('SELECT e.first_name AS Employee, m.first_name AS Manager FROM employee e INNER JOIN employee m ON m.id=e.manager_id ORDER BY e.id', (err, results) => {
         if (err) throw err;
         // View the results
+        console.log("\n")
         console.table(results)
         console.log("\n")
         // Call the Start Function to go back to the main menu
