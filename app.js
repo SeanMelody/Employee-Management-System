@@ -11,6 +11,8 @@ const clear = require('clear');
 // Const Figlet to print my super cool title in the console. Yeay!
 const figlet = require('figlet');
 
+
+
 // Connect to the Database!
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -273,7 +275,7 @@ function view() {
 // View Department Function to show the different departments
 function viewDepartments() {
     // Connect to the database and ask the question
-    connection.query('SELECT name FROM department', (err, results) => {
+    connection.query('SELECT * FROM department', (err, results) => {
         if (err) throw err;
         // View the results
         console.table(results)
@@ -284,10 +286,11 @@ function viewDepartments() {
     })
 };
 
+//LEFT JOIN department ON role.department_id=department.id ORDER BY role.id
 // View Roles Function to show the different roles
 function viewRoles() {
     // Connect to the database and ask the question
-    connection.query('SELECT * FROM role RIGHT JOIN department ON department.id=role.department_id', (err, results) => {
+    connection.query('SELECT * FROM role INNER JOIN department ON department.id=role.id', (err, results) => {
         if (err) throw err;
         // View the results
         console.table(results)
@@ -298,10 +301,20 @@ function viewRoles() {
     })
 };
 
+// 'SELECT * FROM employee RIGHT JOIN role ON employee.role_id=role.id RIGHT JOIN department ON department.id=role.department_id
 // View Employees Function to show the different employees
+
+//SECOND TRY
+// SELECT * FROM department RIGHT JOIN role ON department.id=role.department_id RIGHT JOIN employee ON role.id=employee.role_id
+
+//Third Try
+// SELECT * FROM employee LEFT JOIN role ON employee.role_id=role.id INNER JOIN department ON department.id=role.department_id
+
+//Fourth TRy
+// SELECT employee.id AS employee_id, employee.first_name, employee.last_name, role.id AS role_id, role.title AS role_title, role.department_id AS department_id FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id
 function viewEmployees() {
     // Connect to the database and ask the question
-    connection.query('SELECT * FROM employee LEFT JOIN role ON employee.role_id=role.id LEFT JOIN department ON department.id=role.department_id', (err, results) => {
+    connection.query('SELECT * FROM employee INNER JOIN role ON employee.role_id=role.id INNER JOIN department ON department.id=role.department_id', (err, results) => {
         if (err) throw err;
         // View the results
         console.table(results)
