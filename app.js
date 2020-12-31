@@ -18,9 +18,9 @@ const connection = mysql.createConnection({
     host: 'localhost',
     // Your port; if not 3306
     port: 3306,
-    // Your username
+    // my username
     user: 'root',
-    // Your password
+    // my super secret password
     password: 'password',
     database: 'employees_db',
 });
@@ -303,17 +303,7 @@ function viewRoles() {
     })
 };
 
-// 'SELECT * FROM employee RIGHT JOIN role ON employee.role_id=role.id RIGHT JOIN department ON department.id=role.department_id
-// View Employees Function to show the different employees
-
-//SECOND TRY
-// SELECT * FROM department RIGHT JOIN role ON department.id=role.department_id RIGHT JOIN employee ON role.id=employee.role_id
-
-//Third Try
-// SELECT * FROM employee LEFT JOIN role ON employee.role_id=role.id INNER JOIN department ON department.id=role.department_id
-
-//Fourth TRy
-// SELECT employee.id AS employee_id, employee.first_name, employee.last_name, role.id AS role_id, role.title AS role_title, role.department_id AS department_id FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id
+// View employees function to see all the employees and their roles and departments
 function viewEmployees() {
     // Connect to the database and ask the question
     connection.query('SELECT * FROM employee INNER JOIN role ON employee.role_id=role.id INNER JOIN department ON department.id=role.department_id', (err, results) => {
@@ -332,7 +322,7 @@ function viewEmployees() {
 function viewEmployeesManager() {
     // Connect to the database and ask the question
 
-    //Thank you to Mike S from Stack overflow who answered a similar question in 2021
+    //Thank you to Mike S from Stack overflow who answered a similar question in 2012
     connection.query('SELECT e.first_name AS Employee, m.first_name AS Manager FROM employee e INNER JOIN employee m ON m.id=e.manager_id ORDER BY e.id', (err, results) => {
         if (err) throw err;
         // View the results
@@ -341,7 +331,6 @@ function viewEmployeesManager() {
         console.log("\n")
         // Call the Start Function to go back to the main menu
         start()
-
 
     })
 }
@@ -615,28 +604,6 @@ function deleteEmployees() {
         }])
         // Get the answer to the questions
         .then((answer) => {
-
-            // *** TEST TO MAKE SURE THAT THE PERSON EXISTS IN THE DATABASE ***
-            // connection.query(
-            //     'SELECT first_name, last_name FROM employee',
-            //     [
-            //         {
-            //             first_name: answer.deleteFirstName,
-            //         },
-            //         {
-            //             last_name: answer.deleteLastName,
-            //         },
-            //     ],
-            //     (err, res) => {
-            //         if (err) throw err;
-
-            //         console.log(`${answer.deleteFirstName} ${answer.deleteLastName} Employee Deleted!\n`)
-            //         // Call the start function to go back to the main menu and restart the questions!
-            //         start()
-            //     }
-            // )
-            // *** END TEST ***
-
             // Connect to the database and delete the info!
             connection.query(
                 'DELETE FROM employee WHERE ?',
